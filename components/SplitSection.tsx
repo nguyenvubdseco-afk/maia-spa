@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getSiteConfig } from "@/lib/config";
 import { getZaloUrl } from "@/lib/urls";
 
-export default function SplitSection({
+export default async function SplitSection({
   eyebrow,
   title,
   text,
@@ -18,7 +18,7 @@ export default function SplitSection({
   imageAlt: string;
   reverse?: boolean;
 }) {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
 
   return (
     <div className={`flex flex-col md:flex-row items-center gap-10 my-12 ${reverse ? "md:flex-row-reverse" : ""}`}>

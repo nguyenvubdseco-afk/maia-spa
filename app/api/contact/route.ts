@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Số điện thoại phải gồm 10-11 chữ số" }, { status: 400 });
   }
 
-  const submission = addContact({ type, name, phone, date, time, message });
+  const submission = await addContact({ type, name, phone, date, time, message });
 
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   const kind = type === "job" ? "ứng tuyển" : "đặt lịch";
   const zaloText = `[${siteConfig.name}] Khách hàng mới ${kind}:\nHọ tên: ${name}\nSĐT: ${phone}\nNgày hẹn: ${date || "(chưa chọn)"}\nGiờ hẹn: ${time || "(chưa chọn)"}\nLời nhắn: ${message || "(không có)"}`;
   const zaloResult = await notifyAdminViaZalo(zaloText);

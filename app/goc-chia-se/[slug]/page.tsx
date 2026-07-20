@@ -6,8 +6,8 @@ import { getSiteConfig } from "@/lib/config";
 import { getPosts, getPostBySlug } from "@/lib/posts";
 import Reveal from "@/components/Reveal";
 
-export function generateStaticParams() {
-  return getPosts().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getPosts()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -16,8 +16,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const siteConfig = getSiteConfig();
-  const post = getPostBySlug(slug);
+  const siteConfig = await getSiteConfig();
+  const post = await getPostBySlug(slug);
   return { title: post ? `${post.title} – ${siteConfig.name}` : siteConfig.name };
 }
 
@@ -27,7 +27,7 @@ export default async function PostDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();

@@ -4,7 +4,7 @@ import { verifyPassword, createSession } from "@/lib/adminAuth";
 export async function POST(request: NextRequest) {
   const { password } = await request.json();
 
-  if (!verifyPassword(password)) {
+  if (!(await verifyPassword(password))) {
     return NextResponse.json({ error: "Sai mật khẩu" }, { status: 401 });
   }
 

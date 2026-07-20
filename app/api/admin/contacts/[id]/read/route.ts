@@ -11,7 +11,7 @@ export async function POST(
   }
 
   const { id } = await params;
-  const ok = markContactRead(id);
+  const ok = await markContactRead(id);
 
   if (!ok) {
     return NextResponse.json({ error: "Không tìm thấy liên hệ" }, { status: 404 });

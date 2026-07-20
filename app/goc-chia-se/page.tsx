@@ -6,13 +6,13 @@ import { getPosts } from "@/lib/posts";
 import Reveal from "@/components/Reveal";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Góc chia sẻ – ${siteConfig.name}` };
 }
 
-export default function BlogPage() {
-  const siteConfig = getSiteConfig();
-  const posts = getPosts();
+export default async function BlogPage() {
+  const siteConfig = await getSiteConfig();
+  const posts = await getPosts();
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-12">

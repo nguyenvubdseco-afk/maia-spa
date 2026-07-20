@@ -11,7 +11,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const deleted = deleteContact(id);
+  const deleted = await deleteContact(id);
 
   if (!deleted) {
     return NextResponse.json({ error: "Không tìm thấy liên hệ" }, { status: 404 });

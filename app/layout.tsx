@@ -28,7 +28,7 @@ const alexBrush = Alex_Brush({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return {
     title: `${siteConfig.name} – ${siteConfig.tagline}`,
     description: siteConfig.tagline,
@@ -40,7 +40,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   const isAdmin = await isAdminAuthenticated();
 
   return (

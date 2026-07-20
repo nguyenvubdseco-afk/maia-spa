@@ -15,6 +15,6 @@ export async function PUT(request: NextRequest) {
     }
   }
 
-  savePosts(body);
+  await savePosts(body);
   return NextResponse.json({ ok: true });
 }

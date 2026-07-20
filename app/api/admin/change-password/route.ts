@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Mật khẩu mới cần ít nhất 6 ký tự" }, { status: 400 });
   }
 
-  const ok = changePassword(oldPassword, newPassword);
+  const ok = await changePassword(oldPassword, newPassword);
   if (!ok) {
     return NextResponse.json({ error: "Mật khẩu hiện tại không đúng" }, { status: 400 });
   }

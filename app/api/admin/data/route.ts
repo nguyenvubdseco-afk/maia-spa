@@ -9,9 +9,6 @@ export async function GET() {
     return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
   }
 
-  return NextResponse.json({
-    site: getSiteConfig(),
-    services: getServices(),
-    posts: getPosts(),
-  });
+  const [site, services, posts] = await Promise.all([getSiteConfig(), getServices(), getPosts()]);
+  return NextResponse.json({ site, services, posts });
 }

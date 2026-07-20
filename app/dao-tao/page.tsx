@@ -6,7 +6,7 @@ import { getZaloUrl } from "@/lib/urls";
 import Reveal from "@/components/Reveal";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Đào tạo – ${siteConfig.name}` };
 }
 
@@ -17,8 +17,8 @@ const benefits = [
   "Tăng cường sức đề kháng, phục hồi thể lực",
 ];
 
-export default function TrainingPage() {
-  const siteConfig = getSiteConfig();
+export default async function TrainingPage() {
+  const siteConfig = await getSiteConfig();
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-12">

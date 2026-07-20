@@ -32,3 +32,6 @@ next-env.d.ts
 /logo-google-maps-vector-04.jpg
 /png-clipart-call-logo-button-interior-design-services-icon-design-designer-call-button-room-web-button-thumbnail.png
 /spamoclinhduong.com_.png
+
+.vercel
+.env*

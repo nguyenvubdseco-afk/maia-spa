@@ -7,13 +7,13 @@ import { getServices } from "@/lib/services";
 import Reveal from "@/components/Reveal";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Dịch vụ – ${siteConfig.name}` };
 }
 
-export default function ServicesPage() {
-  const siteConfig = getSiteConfig();
-  const services = getServices();
+export default async function ServicesPage() {
+  const siteConfig = await getSiteConfig();
+  const services = await getServices();
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-12">

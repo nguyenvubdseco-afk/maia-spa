@@ -7,5 +7,5 @@ export async function GET() {
     return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
   }
 
-  return NextResponse.json(getUnreadCounts());
+  return NextResponse.json(await getUnreadCounts());
 }

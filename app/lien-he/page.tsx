@@ -5,7 +5,7 @@ import { ensureAbsoluteUrl } from "@/lib/urls";
 import Reveal from "@/components/Reveal";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Liên hệ – ${siteConfig.name}` };
 }
 
@@ -14,7 +14,7 @@ export default async function ContactPage({
 }: {
   searchParams: Promise<{ type?: string }>;
 }) {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   const { type } = await searchParams;
   const isJob = type === "job";
   const mapsUrl = ensureAbsoluteUrl(siteConfig.googleMaps);

@@ -7,8 +7,8 @@ import { getZaloUrl } from "@/lib/urls";
 import { getServices, getServiceBySlug } from "@/lib/services";
 import Reveal from "@/components/Reveal";
 
-export function generateStaticParams() {
-  return getServices().map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  return (await getServices()).map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({
@@ -17,8 +17,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const siteConfig = getSiteConfig();
-  const service = getServiceBySlug(slug);
+  const siteConfig = await getSiteConfig();
+  const service = await getServiceBySlug(slug);
   return { title: service ? `${service.name} – ${siteConfig.name}` : siteConfig.name };
 }
 
@@ -28,9 +28,9 @@ export default async function ServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
-  const services = getServices();
-  const siteConfig = getSiteConfig();
+  const service = await getServiceBySlug(slug);
+  const services = await getServices();
+  const siteConfig = await getSiteConfig();
 
   if (!service) {
     notFound();

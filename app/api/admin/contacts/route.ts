@@ -7,5 +7,5 @@ export async function GET() {
     return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
   }
 
-  return NextResponse.json({ contacts: getContacts() });
+  return NextResponse.json({ contacts: await getContacts() });
 }

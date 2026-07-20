@@ -8,6 +8,6 @@ export async function PUT(request: NextRequest) {
   }
 
   const body: SiteConfig = await request.json();
-  saveSiteConfig(body);
+  await saveSiteConfig(body);
   return NextResponse.json({ ok: true });
 }

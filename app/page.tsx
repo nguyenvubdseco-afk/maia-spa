@@ -20,9 +20,9 @@ const benefits = [
 
 const SERVICES_PER_COLUMN = 5;
 
-export default function HomePage() {
-  const siteConfig = getSiteConfig();
-  const services = getServices();
+export default async function HomePage() {
+  const siteConfig = await getSiteConfig();
+  const services = await getServices();
   const serviceColumns = [
     services.slice(0, SERVICES_PER_COLUMN),
     services.slice(SERVICES_PER_COLUMN, SERVICES_PER_COLUMN * 2),

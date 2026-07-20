@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getServices } from "@/lib/services";
 
-export default function ServiceGrid() {
-  const featured = getServices().slice(0, 6);
+export default async function ServiceGrid() {
+  const featured = (await getServices()).slice(0, 6);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">

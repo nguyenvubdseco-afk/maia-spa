@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { isVercel, readJsonBlob, writeJsonBlob } from "./store";
 
 export interface SiteConfig {
   name: string;
@@ -21,14 +22,25 @@ export interface SiteConfig {
 }
 
 const dataPath = path.join(process.cwd(), "data", "site.json");
+const BLOB_PATH = "data/site.json";
 
-export function getSiteConfig(): SiteConfig {
+function readLocalFile(): SiteConfig {
   const raw = fs.readFileSync(dataPath, "utf-8");
-  const parsed = JSON.parse(raw);
-  // Chỗ dự phòng cho field mới thêm sau này (vd. googleMaps) nếu site.json cũ chưa có.
-  return { googleMaps: "", ...parsed };
+  return JSON.parse(raw);
 }
 
-export function saveSiteConfig(config: SiteConfig): void {
+export async function getSiteConfig(): Promise<SiteConfig> {
+  // Chỗ dự phòng cho field mới thêm sau này (vd. googleMaps) nếu dữ liệu cũ chưa có.
+  const data = isVercel
+    ? (await readJsonBlob<Partial<SiteConfig>>(BLOB_PATH)) ?? readLocalFile()
+    : readLocalFile();
+  return { googleMaps: "", ...data } as SiteConfig;
+}
+
+export async function saveSiteConfig(config: SiteConfig): Promise<void> {
+  if (isVercel) {
+    await writeJsonBlob(BLOB_PATH, config);
+    return;
+  }
   fs.writeFileSync(dataPath, JSON.stringify(config, null, 2), "utf-8");
 }

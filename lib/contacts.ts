@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { isVercel, readJsonBlob, writeJsonBlob } from "./store";
 
 export type ContactType = "booking" | "job";
 
@@ -16,6 +17,7 @@ export interface ContactSubmission {
 }
 
 const dataPath = path.join(process.cwd(), "data", "contacts.json");
+const BLOB_PATH = "data/contacts.json";
 
 /** Chuẩn hoá dữ liệu cũ (trước khi có field type/read) — coi như đã đọc rồi. */
 function normalize(raw: unknown[]): ContactSubmission[] {
@@ -35,57 +37,71 @@ function normalize(raw: unknown[]): ContactSubmission[] {
   });
 }
 
-export function getContacts(): ContactSubmission[] {
+async function readRaw(): Promise<unknown[]> {
+  if (isVercel) {
+    return (await readJsonBlob<unknown[]>(BLOB_PATH)) ?? [];
+  }
   if (!fs.existsSync(dataPath)) return [];
-  const raw = fs.readFileSync(dataPath, "utf-8");
   try {
-    return normalize(JSON.parse(raw));
+    return JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   } catch {
     return [];
   }
 }
 
-export function addContact(
+async function writeRaw(contacts: ContactSubmission[]): Promise<void> {
+  if (isVercel) {
+    await writeJsonBlob(BLOB_PATH, contacts);
+    return;
+  }
+  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2), "utf-8");
+}
+
+export async function getContacts(): Promise<ContactSubmission[]> {
+  return normalize(await readRaw());
+}
+
+export async function addContact(
   entry: Omit<ContactSubmission, "id" | "createdAt" | "read">
-): ContactSubmission {
+): Promise<ContactSubmission> {
   const submission: ContactSubmission = {
     ...entry,
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     read: false,
     createdAt: new Date().toISOString(),
   };
-  const contacts = getContacts();
+  const contacts = await getContacts();
   contacts.unshift(submission);
-  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2), "utf-8");
+  await writeRaw(contacts);
   return submission;
 }
 
-export function deleteContact(id: string): boolean {
-  const contacts = getContacts();
+export async function deleteContact(id: string): Promise<boolean> {
+  const contacts = await getContacts();
   const next = contacts.filter((c) => c.id !== id);
   if (next.length === contacts.length) return false;
-  fs.writeFileSync(dataPath, JSON.stringify(next, null, 2), "utf-8");
+  await writeRaw(next);
   return true;
 }
 
-export function markAllContactsRead(type?: ContactType): void {
-  const contacts = getContacts().map((c) =>
+export async function markAllContactsRead(type?: ContactType): Promise<void> {
+  const contacts = (await getContacts()).map((c) =>
     !type || c.type === type ? { ...c, read: true } : c
   );
-  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2), "utf-8");
+  await writeRaw(contacts);
 }
 
-export function markContactRead(id: string): boolean {
-  const contacts = getContacts();
+export async function markContactRead(id: string): Promise<boolean> {
+  const contacts = await getContacts();
   const target = contacts.find((c) => c.id === id);
   if (!target) return false;
   target.read = true;
-  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2), "utf-8");
+  await writeRaw(contacts);
   return true;
 }
 
-export function getUnreadCounts(): { booking: number; job: number; total: number } {
-  const contacts = getContacts();
+export async function getUnreadCounts(): Promise<{ booking: number; job: number; total: number }> {
+  const contacts = await getContacts();
   const booking = contacts.filter((c) => !c.read && c.type === "booking").length;
   const job = contacts.filter((c) => !c.read && c.type === "job").length;
   return { booking, job, total: booking + job };

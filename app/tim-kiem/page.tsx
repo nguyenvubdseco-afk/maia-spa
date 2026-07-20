@@ -6,7 +6,7 @@ import { getPosts } from "@/lib/posts";
 import { matchesQuery } from "@/lib/search";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Tìm kiếm – ${siteConfig.name}` };
 }
 
@@ -19,10 +19,10 @@ export default async function SearchPage({
   const query = (q ?? "").trim();
 
   const matchedServices = query
-    ? getServices().filter((s) => matchesQuery(s.name, query) || matchesQuery(s.summary, query))
+    ? (await getServices()).filter((s) => matchesQuery(s.name, query) || matchesQuery(s.summary, query))
     : [];
   const matchedPosts = query
-    ? getPosts().filter((p) => matchesQuery(p.title, query) || matchesQuery(p.excerpt, query))
+    ? (await getPosts()).filter((p) => matchesQuery(p.title, query) || matchesQuery(p.excerpt, query))
     : [];
 
   const hasResults = matchedServices.length > 0 || matchedPosts.length > 0;

@@ -4,12 +4,12 @@ import { getSiteConfig } from "@/lib/config";
 import Reveal from "@/components/Reveal";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
   return { title: `Giới thiệu – ${siteConfig.name}` };
 }
 
-export default function AboutPage() {
-  const siteConfig = getSiteConfig();
+export default async function AboutPage() {
+  const siteConfig = await getSiteConfig();
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-12">

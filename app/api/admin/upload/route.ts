@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
+import { put } from "@vercel/blob";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/adminAuth";
+import { isVercel } from "@/lib/store";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 8 * 1024 * 1024; // 8MB
@@ -47,11 +49,21 @@ export async function POST(request: NextRequest) {
   const ext = safeExtension(file.name);
   const base = slugifyBase(file.name);
   const filename = `${base}-${Date.now()}${ext}`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  if (isVercel) {
+    const blob = await put(`uploads/${filename}`, buffer, {
+      access: "public",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: file.type,
+      token: process.env.IMAGES_READ_WRITE_TOKEN,
+    });
+    return NextResponse.json({ path: blob.url });
+  }
 
   const uploadDir = path.join(process.cwd(), "public", "images", "uploads");
   fs.mkdirSync(uploadDir, { recursive: true });
-
-  const buffer = Buffer.from(await file.arrayBuffer());
   fs.writeFileSync(path.join(uploadDir, filename), buffer);
 
   return NextResponse.json({ path: `/images/uploads/${filename}` });

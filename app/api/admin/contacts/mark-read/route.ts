@@ -10,6 +10,6 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
   const type: ContactType | undefined = body.type === "job" || body.type === "booking" ? body.type : undefined;
 
-  markAllContactsRead(type);
+  await markAllContactsRead(type);
   return NextResponse.json({ ok: true });
 }
