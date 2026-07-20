@@ -122,14 +122,14 @@ Mọi nơi render `href` từ `siteConfig.zalo`/`siteConfig.facebook` phải đi
 - `SearchBox`/`/tim-kiem` mới chỉ tìm trong `services` + `posts` hiện có (không có backend/index thật, phù hợp vì site chưa có CMS)
 
 ## Trang quản trị (/admin)
-Đã thêm trang quản trị đơn giản để sửa nội dung/ảnh **không cần sửa code**, chạy tốt cho mục đích local (đã xác nhận với người dùng — site chỉ chạy local, chưa có kế hoạch deploy):
+Đã thêm trang quản trị đơn giản để sửa nội dung/ảnh **không cần sửa code**. Ban đầu chỉ nhắm tới chạy local, nhưng từ khi deploy lên Vercel (xem mục "Deploy production" phía dưới), `/admin` hoạt động đầy đủ trên cả local lẫn production nhờ tầng dữ liệu chuyển sang Vercel Blob khi chạy trên Vercel:
 - **Link đăng nhập quản trị** đặt ở cuối Trang chủ (`app/page.tsx`, dòng nhỏ "🔒 Đăng nhập quản trị"), trỏ tới `/admin` — cố tình để nhỏ/mờ vì không phải CTA cho khách hàng
 - Đăng nhập bằng mật khẩu (mặc định `changeme123`, lấy từ `.env.local` → `ADMIN_PASSWORD` **chỉ dùng cho lần đầu tiên**, sau đó đổi được qua tab "Đổi mật khẩu")
 - 4 tab: **Thông tin chung**, **Dịch vụ**, **Bài viết** (như trước), và **Đổi mật khẩu** (form đổi mật khẩu, yêu cầu nhập đúng mật khẩu hiện tại)
 - Upload ảnh trực tiếp trong form (lưu vào `public/images/uploads/`) hoặc gõ tay đường dẫn ảnh có sẵn
 - Lưu nội dung bằng cách ghi trực tiếp vào file JSON trong `data/` (`site.json`, `services.json`, `posts.json`) qua các API route trong `app/api/admin/*` — **không có database**, không cần cài thêm gì
 
-**Kiến trúc dữ liệu:** `lib/config.ts`, `lib/services.ts`, `lib/posts.ts` đều đọc/ghi trực tiếp file JSON bằng `fs` (đọc lại mỗi lần gọi, không cache) → sửa qua admin phản ánh ngay khi reload trang, không cần restart dev server.
+**Kiến trúc dữ liệu:** `lib/config.ts`, `lib/services.ts`, `lib/posts.ts` đọc/ghi qua `fs` khi chạy local, qua Vercel Blob khi chạy trên Vercel (xem `lib/store.ts` và mục "Deploy production" phía dưới) — cả 2 đường đều đọc lại mỗi lần gọi, không cache riêng ở tầng ứng dụng, nên sửa qua admin phản ánh ngay khi reload trang.
 
 **Auth (đã nâng cấp từ bản đầu):**
 - Mật khẩu được **hash bằng `crypto.scryptSync`** (salt riêng), lưu trong `data/admin.json` — không còn lưu plaintext. File này tự tạo lần đầu tiên có người đăng nhập, dựa trên `ADMIN_PASSWORD` trong `.env.local`.
@@ -137,9 +137,21 @@ Mọi nơi render `href` từ `siteConfig.zalo`/`siteConfig.facebook` phải đi
 - Cookie **không đặt `maxAge`/`expires`** → là session cookie, tự bị trình duyệt xoá khi **đóng toàn bộ cửa sổ trình duyệt** (lưu ý: đóng 1 tab trong khi còn tab khác của cùng trình duyệt thì session vẫn còn, vì session cookie gắn theo phiên trình duyệt chứ không theo từng tab).
 - Nút **"Đăng xuất"** trong `/admin` gọi `POST /api/admin/logout` để xoá session ngay lập tức (không cần đợi đóng browser).
 - Đổi mật khẩu qua `POST /api/admin/change-password` (yêu cầu đăng nhập + đúng mật khẩu hiện tại), viết lại `data/admin.json` với salt/hash mới.
-- Vẫn **chỉ phù hợp cho local** (đã xác nhận với người dùng): chưa có rate-limit chống brute-force, session lưu file JSON đơn giản. Nếu sau này deploy public, nên chuyển sang database thật + rate-limit + có thể thêm 2FA.
+- Đã deploy public (xem mục "Deploy production") nhưng auth vẫn ở mức đơn giản: chưa có rate-limit chống brute-force, chưa 2FA. Nên cân nhắc thêm nếu site có lưu lượng truy cập cao hoặc trở thành mục tiêu tấn công.
 
 **Lưu ý đã gặp khi test:** gửi text tiếng Việt qua `curl -d` trong git-bash bị lỗi encoding (mojibake), làm hỏng `data/site.json` một lần — đã khôi phục lại. Đây là vấn đề của công cụ test qua shell, KHÔNG phải lỗi ứng dụng (form thật trong trình duyệt dùng `fetch`/`JSON.stringify` chuẩn UTF-8, không gặp vấn đề này). Nếu cần test API bằng tay có ký tự tiếng Việt, nên dùng Node script thay vì gõ trực tiếp trong lệnh shell.
+
+## Deploy production (GitHub + Vercel)
+- Repo: https://github.com/nguyenvubdseco-afk/maia-spa.git (branch `main`) — Vercel project: `nguyenvu001/maia-spa`, domain https://maia-spa.vercel.app, tự động deploy khi push lên `main`.
+- **Bug nghiêm trọng phát hiện ngay sau lần deploy đầu tiên:** ổ đĩa của Vercel serverless function là **read-only** (`EROFS`) — mọi `fs.writeFileSync` đều lỗi. Ảnh hưởng: đăng nhập admin lỗi 500 (không tạo được `data/admin.json` lần đầu), và **form đặt lịch của khách bị mất âm thầm** (form báo thành công nhưng `addContact()` không ghi được vào `data/contacts.json`). Đã xác nhận qua `vercel logs` thấy `Error: EROFS: read-only file system`.
+- **Đã sửa bằng cách chuyển toàn bộ tầng dữ liệu sang Vercel Blob** khi chạy trên Vercel (biến `process.env.VERCEL` luôn có sẵn trên mọi environment của Vercel), giữ nguyên đọc/ghi qua `fs` khi chạy local (`npm run dev`) — xem `lib/store.ts` (helper `readJsonBlob`/`writeJsonBlob`, biến `isVercel`).
+  - **2 Blob store riêng biệt** (1 store chỉ có 1 mức truy cập cố định private/public):
+    - `maia-spa-data` (**private**, token mặc định `BLOB_READ_WRITE_TOKEN`) — chứa `data/site.json`, `data/services.json`, `data/posts.json`, `data/contacts.json`, `data/admin.json`, `data/sessions.json`. `lib/config.ts`/`lib/services.ts`/`lib/posts.ts` đọc Blob trước, nếu chưa có (lần đầu, chưa admin nào lưu gì) thì fallback đọc file JSON bundle trong repo làm dữ liệu khởi tạo. `lib/contacts.ts`/`lib/adminAuth.ts` chỉ dùng Blob, không có fallback (dữ liệu runtime thuần tuý).
+    - `maia-spa-images` (**public**, token riêng `IMAGES_READ_WRITE_TOKEN` — phải set prefix `IMAGES_` lúc connect vì 1 project không cho 2 store cùng dùng tên biến `BLOB_READ_WRITE_TOKEN`) — ảnh admin upload qua `/api/admin/upload` được đẩy lên đây, trả về URL dạng `https://<id>.public.blob.vercel-storage.com/uploads/...`. `next.config.mjs` đã thêm `images.remotePatterns` cho domain này để `next/image` load được.
+  - **Bug thứ 2 phát hiện khi test kỹ:** `get()` của Vercel Blob mặc định cache ở CDN (`useCache: true`) → sau khi xoá/sửa 1 liên hệ, gọi list ngay lập tức vẫn thấy dữ liệu cũ (đã tái hiện được bằng test tay: xoá xong, gọi lại API list vẫn thấy liên hệ vừa xoá). Mọi thao tác admin đều là chu trình đọc-sửa-ghi trên cùng 1 blob JSON nên bắt buộc phải đọc mới nhất — đã set `useCache: false` trong `readJsonBlob` (`lib/store.ts`) để đánh đổi độ trễ đọc lấy tính đúng đắn.
+  - Local dev **không bị ảnh hưởng** — vẫn dùng `fs` như cũ, không cần Blob token, không tốn network call.
+- **Vercel CLI hữu ích đã dùng:** `vercel blob create-store <name> --access private|public --yes --environment production --environment preview --environment development` (tạo + tự connect), `vercel integration-resource connect <store> <project> --prefix XXX_ --yes` (connect thêm store thứ 2 với tên biến môi trường khác để tránh đụng), `vercel env pull` (đồng bộ token về `.env.local` cho local dev/test), `vercel logs <url>` (xem log lỗi runtime thật — khác `vercel inspect --logs` chỉ cho log lúc build).
+- Biến môi trường Production hiện có: `ADMIN_PASSWORD` (chỉ set cho Production, chưa set Preview/Development), `BLOB_READ_WRITE_TOKEN`, `IMAGES_READ_WRITE_TOKEN`, `VERCEL_OIDC_TOKEN` (tự động).
 
 ## Chạy dự án
 ```
