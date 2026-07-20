@@ -1,0 +1,34 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# env
+.env*.local
+
+# admin auth data (password hash + active sessions)
+/data/admin.json
+/data/.sessions.json
+
+# dữ liệu khách hàng gửi form liên hệ (thông tin cá nhân)
+/data/contacts.json
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# ảnh tham khảo dùng lúc phát triển, không thuộc website (đã copy bản cần dùng vào public/images)
+/Ảnh tách nền-01.png
+/Facebook_Logo_2023.png
+/logo-google-maps-vector-04.jpg
+/png-clipart-call-logo-button-interior-design-services-icon-design-designer-call-button-room-web-button-thumbnail.png
+/spamoclinhduong.com_.png

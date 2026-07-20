@@ -1,0 +1,101 @@
+[
+  {
+    "slug": "combo-khoe",
+    "name": "Combo Khỏe",
+    "duration": "120 phút",
+    "price": "",
+    "image": "/images/massage-full-body.jpg",
+    "summary": "Dưỡng sinh trị liệu đau mỏi vai gáy/đau thắt lưng eo, kết hợp gội trị liệu bài độc.",
+    "description": "Liệu trình kết hợp xoa bóp bấm huyệt toàn thân với gội đầu dưỡng sinh, giúp giảm đau mỏi vai gáy, thắt lưng và thải độc cơ thể. [Điền mô tả chi tiết quy trình thực hiện]."
+  },
+  {
+    "slug": "combo-thu-gian",
+    "name": "Combo Thư Giãn",
+    "duration": "90 phút",
+    "price": "",
+    "image": "/images/massage-head.jpg",
+    "summary": "Kết hợp massage body và chăm sóc đầu, giúp thư giãn toàn diện sau ngày dài làm việc.",
+    "description": "Liệu trình thư giãn toàn thân kết hợp massage body nhẹ nhàng và chăm sóc da đầu, phù hợp cho khách hàng cần giải toả căng thẳng. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "tri-lieu-vai-gay",
+    "name": "Trị liệu vai gáy",
+    "duration": "45 phút",
+    "price": "",
+    "image": "/images/service-pexels.jpg",
+    "summary": "Tập trung xử lý đau mỏi vùng cổ, vai, gáy — vấn đề phổ biến của dân văn phòng.",
+    "description": "Kỹ thuật bấm huyệt và xoa bóp chuyên sâu vùng cổ vai gáy, giúp giảm đau nhức, cải thiện tuần hoàn máu. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "tri-lieu-cot-song-lung",
+    "name": "Trị liệu cột sống lưng",
+    "duration": "60 phút",
+    "price": "",
+    "image": "/images/uploads/504150281-23942618765378167-2787391195276611518-n-1784524746701.jpg",
+    "summary": "Hỗ trợ giảm đau thắt lưng, cải thiện tư thế cột sống.",
+    "description": "Liệu trình tác động sâu vào các huyệt đạo dọc cột sống lưng, giúp giảm đau mỏi và hỗ trợ cột sống khoẻ mạnh hơn. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "tri-lieu-than-kinh-toa",
+    "name": "Trị liệu đau thần kinh tọa",
+    "duration": "60 phút",
+    "price": "",
+    "image": "/images/massage-head.jpg",
+    "summary": "Giảm đau và tê dọc theo đường đi của dây thần kinh tọa.",
+    "description": "Kỹ thuật trị liệu chuyên biệt giúp giảm chèn ép và đau nhức do thần kinh tọa gây ra. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "giac-hoi-thai-doc",
+    "name": "Giác hơi thải độc",
+    "duration": "30 phút",
+    "price": "",
+    "image": "/images/uploads/503430105-23942619048711472-4171986334269638963-n-1784525541363.jpg",
+    "summary": "Phương pháp giác hơi cổ truyền giúp lưu thông khí huyết, thải độc cơ thể.",
+    "description": "Sử dụng ống giác tạo áp lực hút trên da để kích thích tuần hoàn máu, hỗ trợ đào thải độc tố. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "cham-soc-giai-tinh-mach",
+    "name": "Chăm sóc giãn tĩnh mạch chân",
+    "duration": "45 phút",
+    "price": "",
+    "image": "/images/massage-full-body.jpg",
+    "summary": "Hỗ trợ giảm cảm giác nặng chân, cải thiện tuần hoàn tĩnh mạch.",
+    "description": "Kỹ thuật massage chuyên biệt cho vùng chân, hỗ trợ giảm triệu chứng suy giãn tĩnh mạch. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "phuc-hoi-hau-covid",
+    "name": "Chăm sóc phục hồi hậu COVID",
+    "duration": "90 phút",
+    "price": "",
+    "image": "/images/massage-head.jpg",
+    "summary": "Chương trình chăm sóc phục hồi dành cho khách hàng gặp di chứng hậu COVID.",
+    "description": "Liệu trình kết hợp xoa bóp, bấm huyệt và tư vấn dưỡng sinh giúp phục hồi thể lực, giảm mệt mỏi và các di chứng hậu COVID. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "lieu-trinh-chuyen-sau-cao-cap",
+    "name": "Liệu trình chuyên sâu cao cấp",
+    "duration": "120 phút",
+    "price": "",
+    "image": "/images/service-pexels.jpg",
+    "summary": "Liệu trình toàn diện kết hợp nhiều kỹ thuật trị liệu cổ truyền.",
+    "description": "Kết hợp nhiều kỹ thuật: xoa bóp, bấm huyệt, giác hơi và chăm sóc chuyên sâu trong một liệu trình duy nhất. [Điền mô tả chi tiết]."
+  },
+  {
+    "slug": "goi-dau-duong-sinh",
+    "name": "Gội đầu Dưỡng sinh",
+    "duration": "1h30",
+    "price": "250.000",
+    "image": "/images/uploads/518279867-24215355448104496-744506938313960685-n-1784525659259.jpg",
+    "summary": "Dịch vụ gội đầu dưỡng sinh thư giãn",
+    "description": ""
+  },
+  {
+    "slug": "tri-mun-nam",
+    "name": "Trị mụn - nám",
+    "duration": "45 phút",
+    "price": "",
+    "image": "/images/uploads/511301037-24121587540814621-1830978846750637436-n-1784538490146.jpg",
+    "summary": "Dịch vụ trị nám da, mụn",
+    "description": ""
+  }
+]

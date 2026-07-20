@@ -1,0 +1,17 @@
+import { NextResponse } from "next/server";
+import { isAdminAuthenticated } from "@/lib/adminAuth";
+import { getSiteConfig } from "@/lib/config";
+import { getServices } from "@/lib/services";
+import { getPosts } from "@/lib/posts";
+
+export async function GET() {
+  if (!(await isAdminAuthenticated())) {
+    return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
+  }
+
+  return NextResponse.json({
+    site: getSiteConfig(),
+    services: getServices(),
+    posts: getPosts(),
+  });
+}

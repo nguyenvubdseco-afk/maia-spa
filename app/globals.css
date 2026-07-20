@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #fefaf6;
+  color: #807673;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #513125;
+}
+
+@keyframes spa-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(234, 67, 53, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(234, 67, 53, 0);
+  }
+}
+
+.animate-spa-pulse {
+  animation: spa-pulse 1.6s infinite;
+}
+
+/* Nút voucher: nhấp nháy + phát sáng để thu hút sự chú ý */
+@keyframes voucher-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(196, 122, 94, 0.65);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 16px rgba(196, 122, 94, 0);
+    transform: scale(1.06);
+  }
+}
+.animate-voucher-pulse {
+  animation: voucher-pulse 1.8s ease-in-out infinite;
+}
+
+/* Chữ có gắn link: to lên khi di chuột vào */
+.link-hover {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.link-hover:hover {
+  transform: scale(1.1);
+}
