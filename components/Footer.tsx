@@ -18,7 +18,7 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
         />
       </div>
 
-      <p className="font-script text-[#FEF1E5] text-2xl md:text-3xl max-w-xl mx-auto leading-relaxed">
+      <p className="font-script text-[#FEF1E5] text-[clamp(0.8rem,4vw,1.875rem)] max-w-xl mx-auto leading-relaxed">
         {siteConfig.footerQuoteLine1}
         <br />
         {siteConfig.footerQuoteLine2}

@@ -46,7 +46,7 @@ export default async function HomePage() {
             className="h-20 sm:h-24 w-auto mx-auto mb-4"
           />
           <h1 className="sr-only">{siteConfig.name}</h1>
-          <p className="font-script text-[#FEF1E5] text-4xl md:text-5xl">{siteConfig.heroQuote}</p>
+          <p className="font-script text-[#FEF1E5] text-[clamp(1.1rem,6vw,3rem)]">{siteConfig.heroQuote}</p>
         </div>
       </div>
 
