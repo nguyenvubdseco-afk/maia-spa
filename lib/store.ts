@@ -8,7 +8,9 @@ import { get, put } from "@vercel/blob";
 export const isVercel = !!process.env.VERCEL;
 
 export async function readJsonBlob<T>(pathname: string): Promise<T | null> {
-  const result = await get(pathname, { access: "private" });
+  // useCache:false bắt buộc vì các thao tác admin (xoá, đánh dấu đã đọc...) đọc-sửa-ghi
+  // ngay sau nhau — đọc từ cache CDN có thể trả dữ liệu cũ, làm mất thao tác vừa ghi.
+  const result = await get(pathname, { access: "private", useCache: false });
   if (!result || result.stream === null) return null;
   const text = await new Response(result.stream).text();
   try {
